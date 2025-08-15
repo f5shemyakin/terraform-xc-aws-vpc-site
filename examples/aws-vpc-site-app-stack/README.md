@@ -53,7 +53,6 @@ Key variables specific to the App Stack site type:
 
 - `k8s_cluster`: Kubernetes cluster configuration object
 - `default_storage`: Use default storage class (boolean)
-- `storage_class_list`: List of custom storage class configurations
 - `dc_cluster_group`: DC cluster group configuration
 
 ## Requirements

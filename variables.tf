@@ -542,12 +542,6 @@ variable "k8s_cluster" {
   default = null
 }
 
-variable "storage_class_list" {
-  description = "List of storage class names for app_stack site type."
-  type        = list(string)
-  default     = []
-}
-
 variable "default_storage" {
   description = "Use default storage class for app_stack site type."
   type        = bool
