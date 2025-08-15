@@ -10,7 +10,7 @@ provider "aws" {
 }
 
 module "aws_vpc_site" {
-  source                = "../.."
+  source = "../.."
 
   site_name             = "aws-example-ingress-egress-gw"
   aws_region            = "us-west-2"
@@ -24,20 +24,20 @@ module "aws_vpc_site" {
   aws_cloud_credentials_name = module.aws_cloud_credentials.name
   block_all_services         = false
 
-  global_network_connections_list = [{ 
-    sli_to_global_dr = { 
-      global_vn = { 
-        name = "sli-to-global-dr" 
-      } 
-    } 
-  }] 
+  global_network_connections_list = [{
+    sli_to_global_dr = {
+      global_vn = {
+        name = "sli-to-global-dr"
+      }
+    }
+  }]
 
   tags = {
     key1 = "value1"
     key2 = "value2"
   }
 
-  depends_on = [ 
+  depends_on = [
     module.aws_cloud_credentials
   ]
 }
@@ -50,7 +50,7 @@ module "aws_cloud_credentials" {
     key1 = "value1"
     key2 = "value2"
   }
-  
+
   name           = "aws-tf-test-creds"
   aws_access_key = var.aws_access_key
   aws_secret_key = var.aws_secret_key

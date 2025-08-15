@@ -20,7 +20,7 @@ module "aws_vpc" {
 }
 
 module "aws_vpc_site" {
-  source                 = "../.."
+  source = "../.."
 
   site_name              = "aws-example-ingress-gw"
   aws_region             = "us-west-2"
@@ -42,7 +42,7 @@ module "aws_vpc_site" {
     key2 = "value2"
   }
 
-  depends_on = [ 
+  depends_on = [
     module.aws_cloud_credentials,
   ]
 }
@@ -55,7 +55,7 @@ module "aws_cloud_credentials" {
     key1 = "value1"
     key2 = "value2"
   }
-  
+
   name           = "aws-tf-test-creds"
   aws_access_key = var.aws_access_key
   aws_secret_key = var.aws_secret_key
