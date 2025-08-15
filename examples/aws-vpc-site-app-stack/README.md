@@ -4,7 +4,8 @@ The following example will create an App Stack (Voltstack Cluster) AWS VPC Site 
 
 ```hcl
 module "aws_vpc_site_app_stack" {
-  source                = "../.."
+  source  = "f5devcentral/aws-vpc-site/xc"
+  version = "0.0.11"
 
   site_name             = "aws-example-app-stack"
   aws_region            = "us-west-2"
@@ -35,18 +36,6 @@ module "aws_vpc_site_app_stack" {
 }
 ```
 
-## Features
-
-This App Stack site type supports:
-
-- **Kubernetes Clusters**: Deploy and manage Kubernetes workloads
-- **Storage Classes**: Configure persistent storage for applications  
-- **DC Cluster Groups**: Connect to distributed cloud cluster groups
-- **Global Networks**: Connect to global virtual networks
-- **Firewall Policies**: Apply enhanced firewall and network policies
-- **Forward Proxy**: Configure forward proxy policies
-- **Static Routes**: Configure custom routing for applications
-
 ## Variables
 
 Key variables specific to the App Stack site type:
@@ -57,15 +46,15 @@ Key variables specific to the App Stack site type:
 
 ## Requirements
 
-| Name                                                                      | Version    |
-| ------------------------------------------------------------------------- | ---------- |
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0     |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws)                   | >= 4.65.0  |
-| <a name="requirement_volterra"></a> [volterra](#requirement\_volterra)    | >= 0.11.26 |
+| Name                                                                                                                 | Version    |
+| -------------------------------------------------------------------------------------------------------------------- | ---------- |
+| <a name="requirement_terraform"></a> [terraform](https://www.terraform.io/)                                          | >= 1.0     |
+| <a name="requirement_aws"></a> [aws](https://registry.terraform.io/providers/hashicorp/aws/latest)                   | >= 6.9.0   |
+| <a name="requirement_volterra"></a> [volterra](https://registry.terraform.io/providers/volterraedge/volterra/latest) | >= 0.11.44 |
 
 ## Providers
 
-| Name                                                             | Version    |
-| ---------------------------------------------------------------- | ---------- |
-| <a name="provider_volterra"></a> [volterra](#provider\_volterra) | >= 0.11.26 |
-| <a name="provider_aws"></a> [aws](#provider\_aws)                | >= 4.65.0  |
+| Name                                                                                                              | Version    |
+| ----------------------------------------------------------------------------------------------------------------- | ---------- |
+| <a name="provider_volterra"></a> [volterra](https://registry.terraform.io/providers/volterraedge/volterra/latest) | >= 0.11.44 |
+| <a name="provider_aws"></a> [aws](https://registry.terraform.io/providers/hashicorp/aws/latest)                   | >= 6.9.0   |

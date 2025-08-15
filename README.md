@@ -52,7 +52,8 @@ module "aws_vpc_site_ingress" {
 
 ```hcl
 module "aws_vpc_site_ingress_egress" {
-  source = "f5devcentral/aws-vpc-site/xc"
+  source  = "f5devcentral/aws-vpc-site/xc"
+  version = "0.0.11"
 
   site_name             = "aws-ingress-egress-gw-site"
   aws_region            = "us-west-2"
@@ -72,7 +73,8 @@ module "aws_vpc_site_ingress_egress" {
 
 ```hcl
 module "aws_vpc_site_app_stack" {
-  source = "f5devcentral/aws-vpc-site/xc"
+  source  = "f5devcentral/aws-vpc-site/xc"
+  version = "0.0.11"
 
   site_name             = "aws-app-stack-site"
   aws_region            = "us-west-2"
