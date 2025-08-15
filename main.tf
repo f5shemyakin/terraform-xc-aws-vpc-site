@@ -35,6 +35,7 @@ module "aws_vpc_network" {
   inside_subnets   = var.inside_subnets
   workload_subnets = var.workload_subnets
 
+  create_outside_route_table = false
 
   vpc_instance_tenancy                     = var.vpc_instance_tenancy
   vpc_enable_dns_hostnames                 = var.vpc_enable_dns_hostnames
@@ -615,7 +616,7 @@ resource "volterra_aws_vpc_site" "this" {
     for_each = var.site_type == "app_stack" ? [0] : []
 
     content {
-      aws_certified_hw = "aws-byol-voltmesh"
+      aws_certified_hw = "aws-byol-voltstack-combo"
 
       allowed_vip_port {
         dynamic "custom_ports" {
