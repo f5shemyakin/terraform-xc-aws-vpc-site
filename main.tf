@@ -607,6 +607,264 @@ resource "volterra_aws_vpc_site" "this" {
     }
   }
 
+  #-----------------------------------------------------
+  # Site type: App Stack (Voltstack Cluster)
+  #-----------------------------------------------------
+
+  dynamic "voltstack_cluster" {
+    for_each = var.site_type == "app_stack" ? [0] : []
+
+    content {
+      aws_certified_hw = "aws-byol-voltmesh"
+
+      allowed_vip_port {
+        dynamic "custom_ports" {
+          for_each = (null != var.allowed_vip_port.custom_port_ranges) ? [0] : []
+          content {
+            port_ranges = var.allowed_vip_port.custom_port_ranges
+          }
+        }
+        disable_allowed_vip_port = (true == var.allowed_vip_port.disable_allowed_vip_port)
+        use_http_https_port      = (true == var.allowed_vip_port.use_http_https_port) ? true : null
+        use_http_port            = (true == var.allowed_vip_port.use_http_port) ? true : null
+        use_https_port           = (true == var.allowed_vip_port.use_https_port) ? true : null
+      }
+
+      dynamic "az_nodes" {
+        for_each = { for idx, value in slice(local.master_nodes_az_names, 0, local.master_nodes_in_az_count) : tostring(idx) => value }
+
+        content {
+          aws_az_name = az_nodes.value
+
+          local_subnet {
+            existing_subnet_id = local.local_subnet_ids[tonumber(az_nodes.key)]
+          }
+        }
+      }
+
+      #-----------------------------------------------------
+      # DC Cluster Group
+      #-----------------------------------------------------
+
+      no_dc_cluster_group = (null == var.dc_cluster_group)
+
+      dynamic "dc_cluster_group" {
+        for_each = (null != var.dc_cluster_group) ? [0] : []
+
+        content {
+          name      = var.dc_cluster_group.name
+          namespace = var.dc_cluster_group.namespace
+          tenant    = var.dc_cluster_group.tenant
+        }
+      }
+
+      #-----------------------------------------------------
+      # Global Network
+      #-----------------------------------------------------
+
+      no_global_network = (length(var.global_network_connections_list) == 0)
+
+      dynamic "global_network_list" {
+        for_each = (length(var.global_network_connections_list) > 0) ? [0] : []
+
+        content {
+          dynamic "global_network_connections" {
+            for_each = var.global_network_connections_list
+            content {
+              dynamic "sli_to_global_dr" {
+                for_each = (null != global_network_connections.value.sli_to_global_dr) ? [0] : []
+
+                content {
+                  global_vn {
+                    name      = global_network_connections.value.sli_to_global_dr.global_vn.name
+                    namespace = global_network_connections.value.sli_to_global_dr.global_vn.namespace
+                    tenant    = global_network_connections.value.sli_to_global_dr.global_vn.tenant
+                  }
+                }
+              }
+
+              dynamic "slo_to_global_dr" {
+                for_each = (null != global_network_connections.value.slo_to_global_dr) ? [0] : []
+
+                content {
+                  global_vn {
+                    name      = global_network_connections.value.slo_to_global_dr.global_vn.name
+                    namespace = global_network_connections.value.slo_to_global_dr.global_vn.namespace
+                    tenant    = global_network_connections.value.slo_to_global_dr.global_vn.tenant
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      #-----------------------------------------------------
+      # Kubernetes Cluster
+      #-----------------------------------------------------
+
+      no_k8s_cluster = (null == var.k8s_cluster)
+
+      dynamic "k8s_cluster" {
+        for_each = (null != var.k8s_cluster) ? [0] : []
+
+        content {
+          name      = var.k8s_cluster.name
+          namespace = var.k8s_cluster.namespace
+          tenant    = var.k8s_cluster.tenant
+        }
+      }
+
+      #-----------------------------------------------------
+      # Manage Firewall Policy
+      #-----------------------------------------------------
+
+      no_network_policy = (length(var.enhanced_firewall_policies_list) == 0 && length(var.active_network_policies_list) == 0)
+
+      dynamic "active_enhanced_firewall_policies" {
+        for_each = (length(var.enhanced_firewall_policies_list) > 0) ? [0] : []
+        content {
+          dynamic "enhanced_firewall_policies" {
+            for_each = var.enhanced_firewall_policies_list
+            content {
+              name      = enhanced_firewall_policies.value.name
+              namespace = enhanced_firewall_policies.value.namespace
+              tenant    = enhanced_firewall_policies.value.tenant
+            }
+          }
+        }
+      }
+
+      dynamic "active_network_policies" {
+        for_each = (length(var.active_network_policies_list) > 0) ? [0] : []
+        content {
+          dynamic "network_policies" {
+            for_each = var.active_network_policies_list
+            content {
+              name      = network_policies.value.name
+              namespace = network_policies.value.namespace
+              tenant    = network_policies.value.tenant
+            }
+          }
+        }
+      }
+
+      #-----------------------------------------------------
+      # Manage Forward Proxy
+      #-----------------------------------------------------
+
+      no_forward_proxy = (length(var.active_forward_proxy_policies_list) == 0)
+
+      forward_proxy_allow_all = (true == var.forward_proxy_allow_all)
+
+      dynamic "active_forward_proxy_policies" {
+        for_each = (length(var.active_forward_proxy_policies_list) > 0) ? [0] : []
+        content {
+          dynamic "forward_proxy_policies" {
+            for_each = var.active_forward_proxy_policies_list
+            content {
+              name      = forward_proxy_policies.value.name
+              namespace = forward_proxy_policies.value.namespace
+              tenant    = forward_proxy_policies.value.tenant
+            }
+          }
+        }
+      }
+
+      #-----------------------------------------------------
+      # Static Routes
+      #-----------------------------------------------------
+
+      no_outside_static_routes = (length(var.outside_static_route_list) == 0)
+
+      dynamic "outside_static_routes" {
+        for_each = (length(var.outside_static_route_list) > 0) ? [0] : []
+        content {
+          dynamic "static_route_list" {
+            for_each = var.outside_static_route_list
+            content {
+              simple_static_route = static_route_list.value.simple_static_route
+              dynamic "custom_static_route" {
+                for_each = (null != static_route_list.value.custom_static_route) ? [0] : []
+                content {
+                  attrs  = static_route_list.value.custom_static_route.attrs
+                  labels = static_route_list.value.custom_static_route.labels
+
+                  dynamic "nexthop" {
+                    for_each = (null != static_route_list.value.custom_static_route.nexthop) ? [0] : []
+                    content {
+                      type = static_route_list.value.custom_static_route.nexthop.type
+
+                      dynamic "interface" {
+                        for_each = (null != static_route_list.value.custom_static_route.nexthop.interface) ? [0] : []
+                        content {
+                          name      = static_route_list.value.custom_static_route.nexthop.interface.name
+                          namespace = static_route_list.value.custom_static_route.nexthop.interface.namespace
+                          tenant    = static_route_list.value.custom_static_route.nexthop.interface.tenant
+                        }
+                      }
+
+                      dynamic "nexthop_address" {
+                        for_each = (null != static_route_list.value.custom_static_route.nexthop.nexthop_address) ? [0] : []
+                        content {
+                          dynamic "ipv4" {
+                            for_each = (null != static_route_list.value.custom_static_route.nexthop.nexthop_address.ipv4) ? [0] : []
+                            content {
+                              addr = static_route_list.value.custom_static_route.nexthop.nexthop_address.ipv4.addr
+                            }
+                          }
+                          dynamic "ipv6" {
+                            for_each = (null != static_route_list.value.custom_static_route.nexthop.nexthop_address.ipv6) ? [0] : []
+                            content {
+                              addr = static_route_list.value.custom_static_route.nexthop.nexthop_address.ipv6.addr
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                  dynamic "subnets" {
+                    for_each = (null != static_route_list.value.custom_static_route.subnets) ? [0] : []
+                    content {
+                      dynamic "ipv4" {
+                        for_each = (null != static_route_list.value.custom_static_route.subnets.ipv4) ? [0] : []
+                        content {
+                          plen   = static_route_list.value.custom_static_route.subnets.ipv4.plen
+                          prefix = static_route_list.value.custom_static_route.subnets.ipv4.prefix
+                        }
+                      }
+                      dynamic "ipv6" {
+                        for_each = (null != static_route_list.value.custom_static_route.subnets.ipv6) ? [0] : []
+                        content {
+                          plen   = static_route_list.value.custom_static_route.subnets.ipv6.plen
+                          prefix = static_route_list.value.custom_static_route.subnets.ipv6.prefix
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      #-----------------------------------------------------
+      # Storage Class
+      #-----------------------------------------------------
+
+      default_storage = (true == var.default_storage)
+
+      #-----------------------------------------------------
+      # IP SEC
+      #-----------------------------------------------------
+
+      sm_connection_public_ip = (true == var.sm_connection_public_ip)
+      sm_connection_pvt_ip    = (true != var.sm_connection_public_ip)
+    }
+  }
+
   lifecycle {
     ignore_changes = [labels]
   }

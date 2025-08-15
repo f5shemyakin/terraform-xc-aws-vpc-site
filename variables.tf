@@ -528,11 +528,41 @@ variable "sm_connection_public_ip" {
   default     = true
 }
 
-# TODO: AWS TGW Settings
-# default_storage
-# storage_class_list 
-# direct_connect_enabled
-# direct_connect_disabled 
+#-----------------------------------------------------------
+# Kubernetes Configuration (for app_stack site type)
+#-----------------------------------------------------------
+
+variable "k8s_cluster" {
+  description = "Kubernetes cluster configuration for app_stack site type."
+  type = object({
+    name      = string
+    namespace = optional(string)
+    tenant    = optional(string)
+  })
+  default = null
+}
+
+variable "storage_class_list" {
+  description = "List of storage class names for app_stack site type."
+  type        = list(string)
+  default     = []
+}
+
+variable "default_storage" {
+  description = "Use default storage class for app_stack site type."
+  type        = bool
+  default     = true
+}
+
+variable "dc_cluster_group" {
+  description = "DC cluster group configuration for app_stack site type."
+  type = object({
+    name      = string
+    namespace = optional(string)
+    tenant    = optional(string)
+  })
+  default = null
+}
 
 #-----------------------------------------------------------
 # AWS VPC
