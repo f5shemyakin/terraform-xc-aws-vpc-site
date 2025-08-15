@@ -148,7 +148,7 @@ resource "volterra_aws_vpc_site" "this" {
     content {
       name      = var.log_receiver.name
       namespace = var.log_receiver.namespace
-      tenant    = vat.log_receiver.tenant
+      tenant    = var.log_receiver.tenant
     }
   }
 
@@ -573,9 +573,9 @@ resource "volterra_aws_vpc_site" "this" {
           dynamic "forward_proxy_policies" {
             for_each = var.active_forward_proxy_policies_list
             content {
-              name      = enhanced_firewall_policies.value.name
-              namespace = enhanced_firewall_policies.value.namespace
-              tenant    = enhanced_firewall_policies.value.tenant
+              name      = forward_proxy_policies.value.name
+              namespace = forward_proxy_policies.value.namespace
+              tenant    = forward_proxy_policies.value.tenant
             }
           }
 

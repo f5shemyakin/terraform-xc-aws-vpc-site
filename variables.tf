@@ -2,6 +2,11 @@ variable "site_name" {
   description = "The name of the AWS VPC Site that will be configured."
   type        = string
   default     = ""
+
+  validation {
+    condition     = length(var.site_name) > 0
+    error_message = "Site name cannot be empty."
+  }
 }
 
 variable "site_description" {
@@ -44,6 +49,11 @@ variable "site_type" {
   description = "The site_type variable is used to specify the type of site that will be deployed. Available values: ingress_gw, ingress_egress_gw, app_stack"
   type        = string
   default     = "ingress_gw"
+
+  validation {
+    condition     = contains(["ingress_gw", "ingress_egress_gw", "app_stack"], var.site_type)
+    error_message = "Site type must be one of: ingress_gw, ingress_egress_gw, app_stack."
+  }
 }
 
 
@@ -54,9 +64,14 @@ variable "master_nodes_az_names" {
 }
 
 variable "nodes_disk_size" {
-  description = "Disk size to be used fornodes in GiB. 80 is 80 GiB."
+  description = "Disk size to be used for nodes in GiB. 80 is 80 GiB."
   type        = number
   default     = 80
+
+  validation {
+    condition     = var.nodes_disk_size >= 80
+    error_message = "Nodes disk size must be at least 80 GiB."
+  }
 }
 
 #-----------------------------------------------------------
@@ -208,7 +223,7 @@ variable "vpc_cidr" {
 
 variable "create_aws_vpc" {
   description = "Create AWS VPC."
-  type        = string
+  type        = bool
   default     = true
 }
 
@@ -285,6 +300,11 @@ variable "worker_nodes_per_az" {
   description = "Desired Worker Nodes Per AZ. Max limit is up to 21."
   type        = number
   default     = 0
+
+  validation {
+    condition     = var.worker_nodes_per_az >= 0 && var.worker_nodes_per_az <= 21
+    error_message = "Worker nodes per AZ must be between 0 and 21."
+  }
 }
 
 #-----------------------------------------------------------
