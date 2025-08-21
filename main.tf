@@ -24,8 +24,9 @@ resource "tls_private_key" "key" {
 module "aws_vpc_network" {
   count = var.create_aws_vpc ? 1 : 0
 
-  source  = "f5devcentral/aws-vpc-site-networking/xc"
-  version = "0.0.5"
+  source = "github.com/yoctoalex/terraform-xc-aws-vpc-site-networking"
+  # source  = "f5devcentral/aws-vpc-site-networking/xc"
+  # version = "0.0.5"
 
   name             = format("%s-vpc", var.site_name)
   az_names         = var.master_nodes_az_names
