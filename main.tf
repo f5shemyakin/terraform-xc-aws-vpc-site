@@ -36,7 +36,7 @@ module "aws_vpc_network" {
   inside_subnets   = var.inside_subnets
   workload_subnets = var.workload_subnets
 
-  create_outside_route_table = false
+  create_outside_default_route = false
 
   vpc_instance_tenancy                     = var.vpc_instance_tenancy
   vpc_enable_dns_hostnames                 = var.vpc_enable_dns_hostnames
