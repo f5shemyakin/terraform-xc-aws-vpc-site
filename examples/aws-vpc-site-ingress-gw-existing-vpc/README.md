@@ -8,7 +8,7 @@ The following example demonstrates how to create an Ingress Gateway AWS VPC Site
 # Create or reference existing VPC networking components
 module "aws_vpc" {
   source  = "f5devcentral/aws-vpc-site-networking/xc"
-  version = "0.0.5"
+  version = "0.0.6"
 
   name          = "aws-example-ingress-gw-vpc"
   vpc_cidr      = "172.10.0.0/16"
@@ -19,7 +19,7 @@ module "aws_vpc" {
 # Create the F5 XC AWS VPC Site using existing VPC
 module "aws_vpc_site_ingress_gw_existing_vpc" {
   source  = "f5devcentral/aws-vpc-site/xc"
-  version = "0.0.11"
+  version = "0.0.12"
 
   site_name              = "aws-example-ingress-gw-existing"
   aws_region             = "us-west-2"
@@ -49,7 +49,7 @@ module "aws_vpc_site_ingress_gw_existing_vpc" {
 
 module "aws_cloud_credentials" {
   source  = "f5devcentral/aws-cloud-credentials/xc"
-  version = "0.0.3"
+  version = "0.0.4"
 
   name           = "aws-example-creds-existing-vpc"
   aws_access_key = var.aws_access_key
@@ -127,5 +127,5 @@ Key variables for this configuration:
 
 | Name                                                                                                                                             | Version |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| <a name="module_aws_vpc"></a> [aws-vpc-site-networking](https://registry.terraform.io/modules/f5devcentral/aws-vpc-site-networking/xc)           | 0.0.5   |
-| <a name="module_aws_cloud_credentials"></a> [aws-cloud-credentials](https://registry.terraform.io/modules/f5devcentral/aws-cloud-credentials/xc) | 0.0.3   |
+| <a name="module_aws_vpc"></a> [aws-vpc-site-networking](https://registry.terraform.io/modules/f5devcentral/aws-vpc-site-networking/xc)           | 0.0.6   |
+| <a name="module_aws_cloud_credentials"></a> [aws-cloud-credentials](https://registry.terraform.io/modules/f5devcentral/aws-cloud-credentials/xc) | 0.0.4   |

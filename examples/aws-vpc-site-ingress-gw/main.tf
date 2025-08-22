@@ -34,7 +34,7 @@ module "aws_vpc_site" {
 
 module "aws_cloud_credentials" {
   source  = "f5devcentral/aws-cloud-credentials/xc"
-  version = "0.0.3"
+  version = "0.0.4"
 
   tags = {
     key1 = "value1"

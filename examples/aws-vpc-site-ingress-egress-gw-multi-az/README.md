@@ -7,7 +7,7 @@ The following example will create an Ingress/Egress Gateway AWS VPC Site in F5 X
 ```hcl
 module "aws_vpc_site_ingress_egress_gw" {
   source  = "f5devcentral/aws-vpc-site/xc"
-  version = "0.0.11"
+  version = "0.0.12"
 
   site_name             = "aws-example-ingress-egress-gw-multi-az"
   aws_region            = "us-west-2"
@@ -45,7 +45,7 @@ module "aws_vpc_site_ingress_egress_gw" {
 
 module "aws_cloud_credentials" {
   source  = "f5devcentral/aws-cloud-credentials/xc"
-  version = "0.0.3"
+  version = "0.0.4"
 
   name           = "aws-example-creds"
   aws_access_key = var.aws_access_key

@@ -5,7 +5,7 @@ The following example will create an App Stack (Voltstack Cluster) AWS VPC Site 
 ```hcl
 module "aws_vpc_site_app_stack" {
   source  = "f5devcentral/aws-vpc-site/xc"
-  version = "0.0.11"
+  version = "0.0.12"
 
   site_name             = "aws-example-app-stack"
   aws_region            = "us-west-2"

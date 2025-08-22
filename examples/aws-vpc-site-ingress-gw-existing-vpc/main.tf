@@ -11,7 +11,7 @@ provider "aws" {
 
 module "aws_vpc" {
   source  = "f5devcentral/aws-vpc-site-networking/xc"
-  version = "0.0.5"
+  version = "0.0.6"
 
   name          = "aws-example-ingress-gw-vpc"
   vpc_cidr      = "172.10.0.0/16"
@@ -49,7 +49,7 @@ module "aws_vpc_site" {
 
 module "aws_cloud_credentials" {
   source  = "f5devcentral/aws-cloud-credentials/xc"
-  version = "0.0.3"
+  version = "0.0.4"
 
   tags = {
     key1 = "value1"
